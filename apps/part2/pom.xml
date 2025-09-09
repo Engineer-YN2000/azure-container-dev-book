@@ -85,6 +85,55 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+            	<artifactId>maven-resources-plugin</artifactId>
+            	<version>3.3.1</version>
+            	<executions>
+                	<execution>
+                    	<id>copy-shell-script</id>
+                    	<phase>process-resources</phase>
+                    	<goals>
+                        	<goal>copy-resources</goal>
+                    	</goals>
+                    	<configuration>
+                        	<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        	<resources>
+                            	<resource>
+                                	<directory>src/main/resources/scripts</directory>
+                                	<includes>
+                                    	<include>webapp_startup.sh</include>
+                                	</includes>
+                            	</resource>
+                        	</resources>
+                    	</configuration>
+                	</execution>
+            	</executions>
+        	</plugin>
+
+        	<plugin>
+            	<groupId>com.google.cloud.tools</groupId>
+            	<artifactId>jib-maven-plugin</artifactId>
+           		<version>3.2.1</version>
+            	<configuration>
+                	<extraDirectories>
+                    	<paths>
+                        	<path>
+                            	<from>${project.build.outputDirectory}</from>
+                            	<into>/</into>
+                            	<includes>
+                                	<include>webapp_startup.sh</include>
+                            	</includes>
+                        	</path>
+                    	</paths>
+                    	<permissions>
+                        	<permission>
+                            	<file>/webapp_startup.sh</file>
+                            	<mode>755</mode>
+                        	</permission>
+                    	</permissions>
+                	</extraDirectories>
+            	</configuration>
+        	</plugin>
 		</plugins>
 	</build>
 

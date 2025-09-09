@@ -26,7 +26,7 @@ if [ ! -d "/var/run/sshd" ]; then
     mkdir -p /var/run/sshd
 fi
 
-/usr/sbin/sshd
+/usr/sbin/sshd &
 
 ## アプリケーションを PID 1 で起動する。
-exec java -cp @/app/jib-classpath-file @/app/jib-main-class-file
+exec java $JAVA_OPTS -cp @/app/jib-classpath-file @/app/jib-main-class-file
