@@ -1,4 +1,4 @@
-name Starging Release(Part2)
+name "Starging Release(Part2)"
 
 on:
   workflow_dispatch:
