@@ -28,6 +28,10 @@ jobs:
         java-version: '17'
         cache: maven
 
+    - name: Create short SHA variable
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
     - name: Build & Push image
       run: |
         az config set defaults.acr=todoken01
@@ -35,7 +39,7 @@ jobs:
         mvn compile test com.google.cloud.tools:jib-maven-plugin:3.2.1:build \
           -Djib.from.image=eclipse-temurin:17.0.4_8-jre-alpine \
           -Djib.to.image=todoken01.azurecr.io/todolist \
-          -Djib.to.tags=v1.0.0-tem_17.0.4_8-jre-alpine_$GITHUB_SHA,latest \
+          -Djib.to.tags=v1.0.0-tem_17.0.4_8-jre-alpine_${{ steps.vars.outputs.sha_short }},latest \
           -Djib.container.entrypoint=sh,webapp_startup.sh \
           -Djib.container.ports=8080,2222 \
           -Djib.container.environment=JDK_JAVA_OPTIONS="-Xmx512m -XX:StartFlightRecording"
@@ -44,6 +48,6 @@ jobs:
       run: |
         az webapp config container set --resource-group rg-azconja-kensyu01 \
           --name doitjustdoit --slot model-beta \
-          --docker-custom-image-name todoken01.azurecr.io/todolist:v1.0.0-tem_17.0.4_8-jre-alpine_$GITHUB_SHA
+          --docker-custom-image-name todoken01.azurecr.io/todolist:v1.0.0-tem_17.0.4_8-jre-alpine_${{ steps.vars.outputs.sha_short }}
 
 
