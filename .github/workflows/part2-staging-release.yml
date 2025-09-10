@@ -3,8 +3,8 @@ name: "Starging Release(Part2)"
 on:
   workflow_dispatch:
   push:
-    branches: "main"
-    paths: 'apps/part2/**'
+    branches: [ "main" ]
+    paths: [ 'apps/part2/**' ]
 
 jobs:
   push_image:
