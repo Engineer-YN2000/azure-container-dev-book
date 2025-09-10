@@ -30,7 +30,7 @@ jobs:
 
     - name: Build & Push image
       run: |
-        az config set defaults.acr=rg-azconja-kensyu01
+        az config set defaults.acr=todoken01
         az acr login
         mvn compile test com.google.cloud.tools:jib-maven-plugin:3.2.1:build \
           -Djib.from.image=eclipse-temurin:17.0.4_8-jre-alpine \
