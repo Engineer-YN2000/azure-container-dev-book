@@ -2,12 +2,15 @@ name: "Starging Release(Part2)"
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    types: [ closed]
     branches: [ "main" ]
     paths: [ 'apps/part2/**' ]
 
 jobs:
   push_image:
+
+    if: github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
     defaults:
