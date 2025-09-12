@@ -7,6 +7,10 @@ on:
     branches: [ "main" ]
     paths: [ 'apps/part2/**' ]
 
+concurrency:
+  group: part2-staging-release
+  cancel-in-progress: true
+
 jobs:
   push_image:
 
@@ -49,8 +53,12 @@ jobs:
 
     - name: Update Staging Slot with the Latest Image
       run: |
-        az webapp config container set --resource-group rg-azconja-kensyu01 \
-          --name doitjustdoit --slot model-beta \
-          --docker-custom-image-name todoken01.azurecr.io/todolist:v1.0.0-tem_17.0.4_8-jre-alpine_${{ steps.vars.outputs.sha_short }}
+        for i in {1..5}; do
+          az webapp config container set --resource-group rg-azconja-kensyu01 \
+            --name doitjustdoit --slot model-beta \
+            --docker-custom-image-name todoken01.azurecr.io/todolist:v1.0.0-tem_17.0.4_8-jre-alpine_${{ steps.vars.outputs.sha_short }} && break
+          echo "Retrying in 10 seconds..."
+          sleep 10
+        done
 
 
